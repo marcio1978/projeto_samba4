@@ -1,0 +1,30 @@
+#!/bin/bash
+
+USUARIOS_FILE="/home/marcio/projeto/usuarios"
+BACKUP_FILE="/home/marcio/projeto/bkp_usuarios"
+
+if [[ ! -f "$USUARIOS_FILE" ]]; then
+    echo "Arquivo $USUARIOS_FILE não encontrado!"
+    exit 1
+fi
+
+while IFS=, read -r username password rest
+do
+    if id "$username" &>/dev/null; then
+        echo "Usuário $username já existe, pulando..."
+        continue
+    fi
+
+    (echo "$password"; echo "$password") | smbpasswd -a "$username"
+
+    echo "Usuário $username adicionado com sucesso."
+
+done < "$USUARIOS_FILE"
+
+# Fazendo backup do arquivo de usuários
+cat "$USUARIOS_FILE" >> "$BACKUP_FILE"
+
+# Limpando o conteúdo do arquivo de usuários
+> "$USUARIOS_FILE"
+
+echo "Todos os usuários foram adicionados com sucesso e o arquivo de usuários foi limpo."

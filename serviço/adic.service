@@ -1,0 +1,9 @@
+[Unit]
+Description=Adicionar usuarios
+
+[Service]
+ExecStart=/usr/sbin/adicionar
+Type=simple
+
+[Install]
+WantedBy=default.target
