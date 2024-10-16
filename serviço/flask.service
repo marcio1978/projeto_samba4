@@ -1,0 +1,11 @@
+[Unit]
+Description=Flask Application
+
+[Service]
+ExecStart=/usr/bin/flask run --host=0.0.0.0
+WorkingDirectory=/home/marcio/projeto
+Environment="FLASK_APP=app.py"
+Environment="FLASK_ENV=production"
+
+[Install]
+WantedBy=default.target
