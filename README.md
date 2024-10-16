@@ -1,5 +1,3 @@
-# projeto_samba4
-
 # SAMBA AD
 
 O Samba Active Directory (Samba AD) é uma implementação do serviço de diretório do Active Directory (AD) da Microsoft, criada pela comunidade de código aberto do Samba. O Active Directory é um serviço de diretório utilizado principalmente em ambientes corporativos que executam o sistema operacional Windows Server. Ele fornece uma variedade de serviços de diretório, incluindo autenticação de usuários, gerenciamento de políticas de segurança, organização de recursos de rede e muito mais.
