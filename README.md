@@ -28,13 +28,13 @@ IP: 172.16.10.10/16
 
 Instalando os pacotes necessários para o funcionamento do Samba-ad
 
-# dnf install samba samba-dc samba-client krb5-workstation
+dnf install samba samba-dc samba-client krb5-workstation
 
 3 - Hostname
 
 Organizando o hostname do servidor:
 
-# hostnamectl hostname fedora.mydomain.lan
+hostnamectl hostname fedora.mydomain.lan
 
 4 - Firewall
 
@@ -42,17 +42,17 @@ Adicionando as regras necessários de firewall:
 
 Adicionando o serviço:
 
-# firewall-cmd --permanent --add-service=samba-dc --zone=FedoraServer
+firewall-cmd --permanent --add-service=samba-dc --zone=FedoraServer
 
 5 - Segundo método
 
 Alternativa para adionar as portas manualmente:
 
-# firewall-cmd --permanent --add-port={53/udp,53/tcp,88/udp,88/tcp,123/udp,135/tcp,137/udp,138/udp,139/tcp,389/udp,389/tcp,445/tcp,464/udp,464/tcp,636/tcp,3268/tcp,3269/tcp,49152-65535/tcp}
+firewall-cmd --permanent --add-port={53/udp,53/tcp,88/udp,88/tcp,123/udp,135/tcp,137/udp,138/udp,139/tcp,389/udp,389/tcp,445/tcp,464/udp,464/tcp,636/tcp,3268/tcp,3269/tcp,49152-65535/tcp}
 
 Releia o firewalld:
 
-# firewall-cmd --reload
+firewall-cmd --reload
 
 6 - SELinux
 
@@ -68,13 +68,13 @@ sudo restorecon -Rv /
 
 Remover o /etc/samba/smb.conf arquivo existente:
 
-# rm /etc/samba/smb.conf
+rm /etc/samba/smb.conf
 
 Temos que acertar o arquivo resolve para divulgar DNS para a rede.
 
 Criar o diretório /etc/systemd/resolved.conf.d/ se ele não existirt:
 
-# mkdir /etc/systemd/resolved.conf.d/
+mkdir /etc/systemd/resolved.conf.d/
 
 Criar o arquivo /etc/systemd/resolved.conf.d/custom.conf contendo o seguinte conteúdo:
 
@@ -85,13 +85,13 @@ DNS=192.168.10.10
 
 Reiniciar o serviço systemd-resolved:
 
-# systemctl restart systemd-resolved
+systemctl restart systemd-resolved
 
 Finalizando, provisionando as onfigurações do Samba.
 
 Use o samba-tool para a diulgação do servidor:
 
-# samba-tool domain provision --server-role=dc --use-rfc2307 --dns-backend=SAMBA_INTERNAL --realm=MYDOMAIN.LAN --domain=MYDOMAIN --adminpass=minhasenha@2024
+samba-tool domain provision --server-role=dc --use-rfc2307 --dns-backend=SAMBA_INTERNAL --realm=MYDOMAIN.LAN --domain=MYDOMAIN --adminpass=minhasenha@2024
 
 O argumento ?use-rfc2307 fornece atributos POSIX ao Active Directory, que armazena informações do usuário e do grupo Unix sobre LDAP.
 
@@ -100,7 +100,7 @@ Certifique-se de que você tem o endereço de encaminhador dns correto definido 
 
 Depois de configurado o Samba devemos configurar o kerberos o arquivo krb5.conf usando:
 
-# cp /usr/share/samba/setup/krb5.conf /etc/krb5.conf.d/samba-dc
+ cp /usr/share/samba/setup/krb5.conf /etc/krb5.conf.d/samba-dc
 
 Edite arquivo /etc/krb5.conf.d/samba-dc adicione as informações da sua organização:
 
@@ -119,8 +119,8 @@ MYDOMAIN.LAN = {
 
 Fazendo da seguinte forma:
 
-# systemctl enable samba
-# systemctl start samba
+ systemctl enable samba
+ systemctl start samba
 
 10 - Testando conectividade
 
@@ -164,7 +164,7 @@ se seus comandos resutlar erros como:
 
 Instale o pacote bind-utils:
 
-# dnf install bind-utils
+dnf install bind-utils
 
 12 - Testanto o Kerberos
 
@@ -179,8 +179,8 @@ $ samba-tool user add --help
 
 Adicionando o usuário marcio.rcolombo ao dominio:
 
-# samba-tool user add marcio.rcolombo MinhaSenha --unix-home=/home/marcio.rcolombo --login-shell=/bin/bash --gecos 'Márcio Colombo.' --given-name=Marcio --surname='Colombo' --mail-address='marcio.colombo@mydomain.lan'
+ samba-tool user add marcio.rcolombo MinhaSenha --unix-home=/home/marcio.rcolombo --login-shell=/bin/bash --gecos 'Márcio Colombo.' --given-name=Marcio --surname='Colombo' --mail-address='marcio.colombo@mydomain.lan'
 
 Liste os usuários do dominio:
 
-# samba-tool user list
+ samba-tool user list
